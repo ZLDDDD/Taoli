@@ -187,11 +187,12 @@ def main():
         print("🎯 符合条件的基金（成交量 > 1000万 且 溢价率 > 9%）:")
         print("="*80)
         for _, row in display_df.iterrows():
+            code = row.get('fund_id', 'N/A') # 获取基金代码
             name = row.get('fund_nm', row.get('fund_id', 'N/A'))
             vol = row.get('volume', 'N/A')
             prem = row.get('discount_rt', 'N/A')
             src = row['source']
-            print(f"【{src}】{name} | 成交量: {vol} | 溢价率: {prem}%")
+            print(f"【{src}】{code} {name} | 成交量: {vol} | 溢价率: {prem}%")
         print("="*80)
         print(f"📌 共 {len(combined_filtered)} 只基金满足条件。")
     else:
