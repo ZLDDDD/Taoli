@@ -3,7 +3,7 @@ name: 📊 JSL LOF 每日监控（纯文本邮件）
 on:
   schedule:
     - cron: '30 6 * * *'   # UTC 6:30 = 北京时间 14:30
-  workflow_dispatch:        # 允许手动触发测试
+  workflow_dispatch:
 
 jobs:
   run-and-email:
@@ -30,11 +30,11 @@ jobs:
 
       - name: 📤 Send email via 163 (plain text body, no attachment)
         env:
-          EMAIL_USER: ${{ secrets.EMAIL_USER }}       # 例如：yourname@163.com
-          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}       # 163邮箱的SMTP授权码
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: |
-          python -c "
+          python3 -c "
 import os, smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -54,7 +54,6 @@ msg['To'] = to_email
 msg['Subject'] = subject
 msg.attach(MIMEText(body, 'plain', 'utf-8'))
 
-# 163 邮箱专用 SMTP 设置
 server = smtplib.SMTP('smtp.163.com', 25)
 server.starttls()
 server.login(from_email, password)
