@@ -3,7 +3,7 @@ name: 📊 JSL LOF 每日监控（纯文本邮件）
 on:
   schedule:
     - cron: '30 6 * * *'   # UTC 6:30 = 北京时间 14:30
-  workflow_dispatch:
+  workflow_dispatch:        # 允许手动触发
 
 jobs:
   run-and-email:
@@ -21,17 +21,15 @@ jobs:
         run: |
           pip install requests pandas openpyxl
 
-      - name: ▶️ Run your script and capture output
+      - name: ▶️ Run analysis script and save output to log
         run: |
           python jsl_lof_analysis.py > output.log 2>&1
-          echo "REPORT<<EOF" >> $GITHUB_ENV
-          cat output.log >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo "✅ 脚本执行完成，日志已保存到 output.log"
 
-      - name: 📤 Send email via 163 (plain text body, no attachment)
+      - name: 📤 Send email via 163 (plain text, no attachment)
         env:
-          EMAIL_USER: ${{ secrets.EMAIL_USER }}
-          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}       # 例如：yourname@163.com
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}       # 163 SMTP 授权码（不是密码！）
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: |
           python3 -c "
@@ -39,26 +37,31 @@ import os, smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+# 读取脚本输出日志（UTF-8 安全）
+with open('output.log', 'r', encoding='utf-8', errors='replace') as f:
+    body = f.read()
+
 subject = '📈 JSL LOF 每日分析报告（纯文本）'
-body = '''${{ env.REPORT }}'''
 to_email = os.getenv('RECIPIENT_EMAIL')
 from_email = os.getenv('EMAIL_USER')
 password = os.getenv('EMAIL_PASS')
 
 if not all([from_email, password, to_email]):
-    raise SystemExit('❌ 缺少邮件配置，请检查 Secrets')
+    raise SystemExit('❌ 错误：缺少 EMAIL_USER、EMAIL_PASS 或 RECIPIENT_EMAIL，请检查 GitHub Secrets')
 
+# 构建邮件
 msg = MIMEMultipart()
 msg['From'] = from_email
 msg['To'] = to_email
 msg['Subject'] = subject
 msg.attach(MIMEText(body, 'plain', 'utf-8'))
 
+# 发送（163 邮箱）
 server = smtplib.SMTP('smtp.163.com', 25)
 server.starttls()
 server.login(from_email, password)
 server.sendmail(from_email, to_email, msg.as_string())
 server.quit()
 
-print('✅ 邮件已通过 163 邮箱发送成功！')
+print('✅ 邮件已通过 163 邮箱成功发送！')
 "
