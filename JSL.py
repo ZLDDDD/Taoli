@@ -7,7 +7,7 @@ import json
 
 # --- 配置 ---
 OUTPUT_DIR = "jsl_data"
-timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+timestamp = datetime.now().strftime('%Y%m%d')
 MAIN_OUTPUT_FILE = os.path.join(OUTPUT_DIR, f"jsl_lof_analysis_{timestamp}.xlsx")
 
 HEADERS = {
