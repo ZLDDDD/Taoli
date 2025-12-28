@@ -52,15 +52,7 @@ jobs:
         # 邮件正文使用脚本的输出
         body: |
           Hello,
-
-          This is an automated email from GitHub Actions.
-
-          The daily JSL LOF analysis script (jsl_lof_analysis.py) for repository ${{ github.repository }} has finished running.
-
-          Run ID: ${{ github.run_id }}
-          Run Number: ${{ github.run_number }}
-          Triggered by: ${{ github.event_name }}
-          Commit SHA: ${{ github.sha }}
+          关注基金：
 
           --- Script Output ---
           ${{ env.output }}
