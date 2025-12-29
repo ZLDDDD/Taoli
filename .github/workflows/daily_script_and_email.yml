@@ -4,7 +4,7 @@ on:
   # 配置计划触发器
   schedule:
     # UTC 6:45 是北京时间 14:45
-    - cron: '45 6 * * *'
+    - cron: '05 7 * * *'
   # 允许手动触发，方便测试
   workflow_dispatch:
 
