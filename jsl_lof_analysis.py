@@ -38,7 +38,7 @@ def clean_and_filter(df, source_name):
     # 筛选条件
     filtered = df[
         (df['volume_clean'] > 1000) &
-        (df['discount_rt_clean'] > 9)
+        (df['discount_rt_clean'] > 8)
     ].copy()
 
     return df, filtered
