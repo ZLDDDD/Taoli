@@ -184,7 +184,7 @@ def main():
         display_df = combined_filtered[available]
 
         print("\n" + "="*80)
-        print("🎯 符合条件的基金（成交量 > 1000万 且 溢价率 > 9%）:")
+        print("🎯 符合条件的基金（成交量 > 1000万 且 溢价率 > 8%）:")
         print("="*80)
         for _, row in display_df.iterrows():
             code = row.get('fund_id', 'N/A') # 获取基金代码
@@ -196,7 +196,7 @@ def main():
         print("="*80)
         print(f"📌 共 {len(combined_filtered)} 只基金满足条件。")
     else:
-        print("\n❌ 无任何基金满足筛选条件（成交量>1000万 且 溢价率>9%）。")
+        print("\n❌ 无任何基金满足筛选条件（成交量>1000万 且 溢价率>8%）。")
 
     # ==================== 保存到单一 Excel 文件 ====================
     if all_sheets:
